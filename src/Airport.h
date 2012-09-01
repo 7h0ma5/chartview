@@ -7,6 +7,7 @@
 class Airport {
 public:
     Airport(QString icao);
+    ~Airport();
 
     QString getICAO();
     void addChart(Chart* chart);

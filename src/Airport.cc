@@ -4,6 +4,10 @@ Airport::Airport(QString icao) {
     this->icao = icao;
 }
 
+Airport::~Airport() {
+    qDeleteAll(charts);
+}
+
 QString Airport::getICAO() {
     return this->icao;
 }

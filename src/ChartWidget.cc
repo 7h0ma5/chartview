@@ -1,6 +1,5 @@
 #include "ChartWidget.h"
 #include <QtGui>
-#include <QDebug>
 
 ChartWidget::ChartWidget() {
     document = 0;
@@ -42,7 +41,7 @@ void ChartWidget::open(QString path) {
 }
 
 void ChartWidget::render() {
-    if (!(document)) return;
+    if (!document) return;
 
     Poppler::Page* page = document->page(0);
 
@@ -85,5 +84,4 @@ void ChartWidget::rotateLeft() {
 void ChartWidget::rotateRight() {
     rotation = ++rotation % 3;
     this->render();
-    qDebug() << "right!";
 }

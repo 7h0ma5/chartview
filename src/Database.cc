@@ -6,17 +6,19 @@ Database::Database() {
 }
 
 Airport* Database::getAirport(QString icao) {
-    return airports.value(icao);
+    return this->airports.value(icao);
 }
 
 QList<QString> Database::getAirportList() {
-    return airports.keys();
+    return this->airports.keys();
 }
 
 void Database::update(QString path) {
-    QDir* dir = new QDir(path);
+    qDeleteAll(this->airports);
+    this->airports.clear();
 
-    QStringList aptdirs = dir->entryList(QDir::Dirs);
+    QDir dir(path);
+    QStringList aptdirs = dir.entryList(QDir::Dirs);
 
     foreach (QString aptdir, aptdirs) {
         if (aptdir.size() != 4) continue;
@@ -29,14 +31,14 @@ void Database::update(QString path) {
         }
 
         // search for pdf files in this dir
-        dir->cd(aptdir);
-        QStringList files = dir->entryList(QStringList("*.pdf"), QDir::Files);
+        dir.cd(aptdir);
+        QStringList files = dir.entryList(QStringList("*.pdf"), QDir::Files);
 
         foreach (QString file, files) {
             QStringList parts = file.toUpper().split(QRegExp("(\\s+|_+|\\.)"));
             parts.removeLast(); // remove pdf ending
 
-            Chart* chart = new Chart(dir->filePath(file));
+            Chart* chart = new Chart(dir.filePath(file));
 
             if (parts.first() == icao) {
                 parts.removeFirst();
@@ -69,6 +71,6 @@ void Database::update(QString path) {
             apt->addChart(chart);
         }
 
-        dir->cdUp();
+        dir.cdUp();
     }
 }

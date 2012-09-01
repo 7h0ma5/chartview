@@ -1,5 +1,4 @@
 #include <QHeaderView>
-#include <QDebug>
 #include "ChartTree.h"
 
 Q_DECLARE_METATYPE(Chart*);
@@ -8,7 +7,17 @@ ChartTree::ChartTree(Database* db) {
     this->header()->hide();
     this->db = db;
 
-    QStringList list  = db->getAirportList();
+    QObject::connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+                     this, SLOT(itemSelected(QTreeWidgetItem*, int)));
+}
+
+void ChartTree::rebuild() {
+    for (int i = 0; i < this->topLevelItemCount(); ++i) {
+        qDeleteAll(this->topLevelItem(i)->takeChildren());
+    }
+    this->clear();
+
+    QStringList list = db->getAirportList();
     qSort(list.begin(), list.end());
 
     foreach(QString apt, list) {
@@ -26,9 +35,6 @@ ChartTree::ChartTree(Database* db) {
 
         this->addTopLevelItem(item);
     }
-
-    QObject::connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-                     this, SLOT(itemSelected(QTreeWidgetItem*, int)));
 }
 
 void ChartTree::itemSelected(QTreeWidgetItem* item, int column) {

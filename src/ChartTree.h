@@ -7,6 +7,7 @@ class ChartTree : public QTreeWidget {
 Q_OBJECT
 public:
     ChartTree(Database* db);
+    void rebuild();
 
 public slots:
     void itemSelected(QTreeWidgetItem* item, int column);
