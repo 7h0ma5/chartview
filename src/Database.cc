@@ -35,7 +35,7 @@ void Database::update(QString path) {
         QStringList files = dir.entryList(QStringList("*.pdf"), QDir::Files);
 
         foreach (QString file, files) {
-            QStringList parts = file.toUpper().split(QRegExp("(\\s+|_+|\\.)"));
+            QStringList parts = file.split(QRegExp("(\\s+|_+|\\.)"));
             parts.removeLast(); // remove pdf ending
 
             Chart* chart = new Chart(dir.filePath(file));
@@ -54,18 +54,54 @@ void Database::update(QString path) {
 
             parts.removeFirst();
 
-            if (parts.contains("ILS")) chart->setFlag(Chart::ILS);
-            if (parts.contains("LOC")) chart->setFlag(Chart::LOC);
-            if (parts.contains("VOR")) chart->setFlag(Chart::VOR);
-            if (parts.contains("DME")) chart->setFlag(Chart::DME);
-            if (parts.contains("RNAV")) chart->setFlag(Chart::RNAV);
-            if (parts.contains("VIS")) chart->setFlag(Chart::VIS);
+            if (parts.contains("ILS")) {
+                chart->setFlag(Chart::ILS);
+                parts.removeAll("ILS");
+            }
+
+            if (parts.contains("LOC")) {
+                chart->setFlag(Chart::LOC);
+                parts.removeAll("LOC");
+            }
+
+            if (parts.contains("VOR")) {
+                chart->setFlag(Chart::VOR);
+                parts.removeAll("VOR");
+            }
+
+            if (parts.contains("DME")) {
+                chart->setFlag(Chart::DME);
+                parts.removeAll("DME");
+            }
+
+            if (parts.contains("RNAV")) {
+                chart->setFlag(Chart::RNAV);
+                parts.removeAll("RNAV");
+            }
+
+            if (parts.contains("VIS")) {
+                chart->setFlag(Chart::VIS);
+                parts.removeAll("VIS");
+            }
+
+            QStringList name;
 
             foreach (QString part, parts) {
                 if (part.startsWith("RWY")) {
                     part.remove(0, 3);
                     chart->setRunway(part);
+                    parts.removeAll(part);
                 }
+                else {
+                    QStringList name_parts = part.split("-");
+                    name << name_parts;
+                }
+            }
+
+            chart->setName(name.join(" "));
+
+            if (chart->getName().isEmpty()) {
+                chart->setName("General");
             }
 
             apt->addChart(chart);

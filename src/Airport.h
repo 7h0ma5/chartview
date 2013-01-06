@@ -11,7 +11,7 @@ public:
 
     QString getICAO();
     void addChart(Chart* chart);
-    QList<Chart*> getCharts();
+    QList<Chart*> getCharts(int type);
 
 private:
     QString icao;

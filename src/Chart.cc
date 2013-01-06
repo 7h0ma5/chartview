@@ -6,29 +6,12 @@ Chart::Chart(QString path, Chart::Type type, int flags) {
     this->flags = flags;
 }
 
+void Chart::setName(QString name) {
+    this->name = name;
+}
+
 QString Chart::getName() {
     QStringList name;
-
-    switch (this->type) {
-    case UNKNOWN:
-      name << "Unknown";
-      break;
-    case GROUND:
-      name << "Ground";
-      break;
-    case SID:
-      name << "SID";
-      break;
-    case STAR:
-      name << "STAR";
-      break;
-    case TRANS:
-      name << "Transition";
-      break;
-    case APPR:
-      name << "Approach";
-      break;
-    }
 
     if (this->flags & Chart::ILS) name << "ILS";
     if (this->flags & Chart::LOC) name << "LOC";
@@ -38,6 +21,8 @@ QString Chart::getName() {
     if (this->flags & Chart::VIS) name << "Visual";
 
     if (!this->runway.isEmpty()) name << "RWY" << this->runway;
+
+    name << this->name;
 
     return name.join(" ");
 }

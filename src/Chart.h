@@ -14,6 +14,7 @@ public:
         STAR,
         TRANS,
         APPR,
+        MISC,
     };
 
     // instrument flags
@@ -27,6 +28,7 @@ public:
 public:
     Chart(QString path, Type type = UNKNOWN, int flags = 0);
 
+    void setName(QString name);
     QString getName();
 
     Type getType();
@@ -46,4 +48,5 @@ private:
     int flags;
     QString path;
     QString runway;
+    QString name;
 };

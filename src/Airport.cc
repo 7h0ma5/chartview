@@ -16,6 +16,14 @@ void Airport::addChart(Chart* chart) {
     this->charts.append(chart);
 }
 
-QList<Chart*> Airport::getCharts() {
-    return charts;
+QList<Chart*> Airport::getCharts(int type) {
+    QList<Chart*> chartList;
+
+    foreach (Chart* chart, this->charts) {
+        if (chart->getType() == type) {
+            chartList.append(chart);
+        }
+    }
+
+    return chartList;
 }
